@@ -1,264 +1,122 @@
-# [Web Application Development](https://gitlab.msu.edu/cse477-spring-2024/course-materials/): Homework 3
-
-
+# [Web Application Development](https://gitlab.msu.edu/cse477-spring-2024/course-materials/): Final Exam
 
 ## Purpose
 
-The purpose of this assignment is to provide hands-on experience with basic security, authentication and asyncryonous communication technologies for your web application, including:
+The purpose of this Final Exam is to assess your understanding of the essential elements of web application development covered this semester; these elements include: 
 
-1. Session management,
-2. Password encryption and user authentication and,
-3. Asynchronous communication technologies.
+1. Reactive front-end design
 
+2. Design of a data-driven backend
 
+3. Session management
 
-## Assignment Goals
+4. Asynchronous communication 
 
-Your high-level goal in this assignment is to extend your webpage from Homework 2 to include:
+5. Web APIs
 
-1. **An Authentication System**:  allowing user authentication, and restricted access to certain components of your application.
-2. **A Chat System**: allowing you and a guest user of your web application to engage in a live text-based conversation. 
-3. **An Editable Resume [Only Required for Honors Option]**:  allowing the site owner to add and edit parts of the resume from Homework 2, using the website.
+   
 
-Your implementation should satisfy both the General Requirements, and Specific Requirements detailed in the sections below;  to help you grasp the overarching goal and requirements more concretely, [see the Homework overview video](https://youtu.be/NZzUMxTJKr4). Please note; your implementation does not have to look identical to the example solution. As long as you achieve the Specific and General requirement below, your assignment is complete.
+## Exam Format and Expectations
 
+The exam is an asynchronous take-home exam that is worth 35% of the final course grade. Please note that: <u>like any class</u>, you are given more time to complete homework assignments than the exam; and, <u>like any class</u>, the purpose of the exam is to assess your independent problem-solving and understanding of the course material. It is against the spirit of our exam (<u>like any exam</u>) for us to offer students with implementation support, hints, or extensions. To be perfectly clear:
 
+* The teaching team will **only** answer questions that seek to clarify an exam requirement.
+* The teaching team **will not** help debug code, problem solve, or assist with deployment.
 
-## Before you begin
+Like the homework assignments, your exam will be gradied using a rubric, which you will find at the bottom of this page. Like the homework assignments, the rubric components are "all or nothing". 
 
-Before you begin this assignment, please complete the following steps.
+**Your exam application should be stand-alone** - that is, it should not be a part of your Homework 1 -3 implementation although you are welcome to use parts of your homework implementation to help you complete the exam requirements. 
 
 
 
-##### 1. Update your local copy of the Course Materials Repository
+## Exam Goals
 
-Navigate to the <u>course materials repository</u> on your local machine, and pull any updates by running the following command from the terminal:
-
-```bash
-git pull https://gitlab.msu.edu/cse477-spring-2024/course-materials.git
-```
-
-
-
-##### 2. Compose the Homework container locally 
-
-1. Navigate to the `Homework-3` directory of your <u>Personal Course Repository</u> (that's the one with the same name as your netID). 
-
-2. Use `docker-compose` to host the web application locally by executing the following command from you terminal:
-
-   ```bash
-   docker-compose -f docker-compose.yml -p hw3-container up
-   ```
-
-3. Visit [http://0.0.0.0:8080](http://0.0.0.0:8080) to ensure the template is running.
-
-4. Note that the Homework 3 [Dockerfile](Dockerfile-dev) will install some additional libraries above and beyond what were used in Homework 2. 
-
-
-
-##### 3. Explore Modifications to the Template Application
-
-In this assignment, you will modify and extend the web application you developed in Homework 2.  As in Homework 2, we have provided a template app for this assignment in `Homework-3/flask-app/` that you can use to scaffold your assignment. Below we provide an overview of some new components in the template that have changed since Homework 2:
-
-* **`database/create_tables`** :
-
-  * `users.sql`: contains the `CREATE TABLE` statement for the  `users` table; this will store the `email`, `password` and `role` of each user.
-
-    
-
-* **`utils/database/database.py`**:  
-
-  * `def createUser(...)`: Contains code to create database entried for your users.
-  * `def authenticate(...)`: Contains code to check if a given username and password combination exist in the database.
-  * `def onewayEncrypt(...)`: Contains code for irriversible encryption of passwords stored in the database.
-  * `def reversibleEncrypt(...)`: Contains code for reversible encryption of content that will be stored in sessions.
-
-  
-
-*  **`app.py`**:
-
-  *  Modified to import and enable SocketIO to support the asynchronous communication requirements of the chat system.
-
-    
-
-* **`__init__.py`**:
-
-  * Modified to import and enable SocketIO to support the asynchronous communication requirements of the chat system.
-
-  * Now creates two test users on app creation:
-
-    ```python
-    db.createUser(email='owner@email.com' ,password='password', role='owner')
-    db.createUser(email='guest@email.com' ,password='password', role='guest')
-    ```
-
-    
-
-* **`routes.py`**: 
-
-  * `def login_required(func)`: contains the declaration of a function decorator that can be used to restrict access to routes within your application. More specifically, if you add `@login_required` on a seperate line the `@app.route(...)`, then users should be unable to access the route, unless they are logged in. Here is an example usage that would restrict access to the chat route, unless the user was logged in:
-
-    ```python
-    @app.route('/chat')
-    @login_required
-    def chat():
-      ...
-    ```
-
-    
-
-  * `def login()`: Contains a template of the login functionality; this should render an HTML template where the users inputs their credentials (email and password).
-
-  * `def processlogin()`: Contains a template for the user authentication feature; this should process the username and password entered by users in the login page. If the authentication passes, it should add a variable to the session `email` containing the users' encrypted email . 
-
-  * `def logout()`: Contains a template of the logout functionality for your website; more specifically, removal of the `email` from the session and redirection to the root directory of the website.
-
-  * `def getUser()`: contains a function that decrypts the `email` stored in a user's session and returns its value or returns `'Unknown'` if there is no email value in the session. 
-
-  * `def chat()` : contains a template for the chat page; this should render an HTML template that allows the users to engage in the chat with you. 
-
-  * `@socketio.on('joined', namespace='/chat')` : uses [socket.io](https://flask-socketio.readthedocs.io/en/latest/getting_started.html) to place users within a chatroom, and sends a message indiciating that they have joined.
-
-    
-
-* **`templates/`** :
-
-  * `chat.html`: contains an html template for the chat system.
-
-  
-
-##### 4. Migrate Homework 2 to Homework 3
-
-Because Homework 3 extends Homework  2, it is important that your work extend your completed Homework 2 assignment. Following your review of the template, please copy over any relevant files from the previous homework into this assignment directory. 
-
-
-
-## General Requirements
-
-As a general requirement, we would like you to following good programming practice, this includes (but is not limited to):
-
-* All code should be commented, organized, and thoughtfully structured.
-* Don't mix `HTML`, `CSS`, and `Javascript` in single files.
-* `Jinja` should be used to minimize redundancies in HTML.
-* `SQL` tables should use forign keys when appropriate, and contain comments at both the row, and the table level.
-
-Please see the General Requirements section of the [assignment rubric](documentation/rubric.md) for other elements of good programming practice that we'd like you you to pay attention to.
+The goal of the final exam is to develop a simplified version of the popular project management tool - [Trello]( https://trello.com/tour ).  Trello is a [Kanban](https://asana.com/resources/what-is-kanban) style application where progress of various project tasks can be easily understood by looking at visual representations. For example, a project can be visualized by a **Board**, different stages of the project are visualized by **Lists**, and **Cards** can be used within a List to represent various tasks. As the project progresses, Cards move from one List to another. For example, a Card for a task that has been completed can be moved from a *'Currently Doing'* List to *'Completed'* List by a team member. Your implementation will be a trimmed down version of a Kanban-style, list-making tool described in the specific requirements below. Before starting the exam, I strongly encourage you to make a free Trello account, and familiarize yourself with the basic functionality of the tool - it will make thr specific requirements below a lot easier to follow.
 
 
 
 ## Specific Requirements
 
-For each of the three assignment goals listed above, we provide a section that outlines the specific requirements associated with that goal, below: 
+ Your implementation must adhere to the following requirements:   
 
+1.  **A Signup System:** You will develop pages that allow your users to first signup with an email and password and then use the same credentials to login. Only logged in users should be allowed to access the application interface. Users must have an ability to logout as well. Make sure that all stored passwords are encrypted in your database.
+2.  **The Interface**: <br>
+  **2.1. Sign-in properties:**  upon first sign in, users should be presented with a message to either open an existing Board, or create a new Board. If they choose to open an existing Board, you must provide a link to access each board they are a part of. If they choose to create a new Board, you must prompt them for (i) a *project name* and (ii) *a list of member emails* - the other users that are allowed to join the project. <br>
+  **2.2. Board Properties:** Each Board is a web page that shows the *project name*, and three default Lists: (1) "To Do"  (2) "Doing" (3) and "Completed".<br>
+  **2.3. List Properties**: Each List should display the list's name, and a set of Cards. When the project board is first created there will be no cards on any of the lists. Each list will have a button that allows Board members to add new Cards to that list.<br>
+  **2.4. Card Properties**: Each Card must have a *text entry box*, and two buttons: Edit and Delete. The *text entry box*, is where a user can describe the details of the Card's task. The Edit button will enable the user to edit the content in the Card's *text entry box*; when editing is complete, the user should press the enter key to commit/save any content in the *text entry box* to the database. The Delete button should delete the card. <br>
+  **2.5. Card Movement:** Users should be able to move Cards across the three default lists in a Board by clicking and dragging the cards from one list, to another.<br>
+  **2.6. Live changes:**. When new Cards are created, or edits to existing cards are made by any user, all other logged-in users should see the updates live (without having to refresh or reload thier pages). Note that you should not allow users outside board members to see the Board, even if they are logged in. <br>  
 
-
-#### 1. Authentication System Requirements 
-
-For this portion of the assignment, you will generate the authentication system for your web application; this will involve two main tasks:  
-
-1. **Extend the database utility to support sensitive data storage and authentication** by extending/completing the following code:
-
-   * **`createUser(email, password, role)`**: Should create database entries for your users given an email, password and role (`guest`, or `owner`). The function should only add a user to the database if they do not already exists (i.e. if there is no matching email). The password of the user should be encrypted using [Scrypt](https://docs.python.org/3/library/hashlib.html) before being stored; you may use the `onewayEncrypt` function provided in the utility. The function should also return information about the success or failure of user creation.
-
-   * **`authenticate(email, password)`**: Should check if a given email and encrypted password combination exist in the database. The function should  return information about the success or failure of the authentication.
-
-2. **Enabling login and logout functionality for your application** by extending/completing the following code:
-
-   * **`@app.route('/login')`**:  Should render the `login.html` template. The HTML template should contain two inputs that capture the email and password of the user, as well as a button that submits the credentials for authentication to `@app.route('/processlogin')`  using an asynchronous POST request via [AJAX](https://flask.palletsprojects.com/en/2.0.x/patterns/jquery/). If `@app.route('/processlogin')` indicates that the authentication was a failure this should be noted on the page; more specifically, your page must dynamically show how many times the authentication attempt has failed. If the authentication is a success, the user should be redirected to `/home`.
-
-   * **`@app.route('/processlogin')`**:  Should be configured to process a POST request containing credentials for authentication. More sepcifically, the tool should extract the credentials from the request, and check if the user's email and password match a value in a the database using the `authenticate` method from the database utility. If the authentication is successful, the user's session should be updated to contain an encrypted version of their email; see below for an example:
-
-   ```python
-   session['email'] = db.reversibleEncrypt('encrypt', form_fields['email']) 
-   ```
-
-   The status of the authentication should be be returned as a JSON object to the AJAX handler in `login.html` for further action; see below for an example:
-
-   ```
-   return json.dumps(status)
-   ```
-
-   * **`@app.route('/logout')`**:  Should remove the `email` field from the session using [session.pop](https://pythonbasics.org/flask-sessions/) and redirect the user back to `/home`.
-
-   * **`templates\shared\layout.html`**: The navigation bar should be updated to include a login/logout option. More specifically, when a user is logged in, they should see the option to logout; conversely, when a user is logged out, they should see the option to login.
-
-
-
-#### 2. Chat System Requirements 
-
-For this portion of the assignment, you will write code creates a live chat system in your web application. This will involve two tasks:  
-
-1. **Complete the chat.html template** by adding HTML, CSS and JavaScript that allows users to see ongoing messages, enter their own messages, and leave the chat. The template already contains a functional implemention of `socket.io` for streaming messages in real time from the Client's interactions with `chat.html` to the `def joined(message)` in `routes.py`.  More specific requirements follow:
-
-   * <u>Room Entry</u>: all users in the chat should see a message indicating when a given user "has entered the room"; this component was already completed for you. 
-   * <u>Message Entry:</u> all users in the chat should see the messages entered by all other users.
-   * <u>Room Derture:</u> all users in the chat should see the messages indicating when a user has "left the room". There should be a button on the page that allows the user to leave the chat.
-   * <u>Message Styling:</u> all messages related to the site owner should be in blue and right justified; all other messages should be grey and left-justified.
-
-2. **Add SocketIO processors in routes.py:** by writing any additonal  `@socketio.on(...)` decorated functions to `emit` data back to `chat.html`
-
-   
-
-#### 3. An Editable Resume
-
-**PLEASE NOTE:** This section is only required if you want to complete the course as an Honors Option. Given the optional nature of this component, the instructions are not be as detailed:
-
-1. Update your `/resume` page page so that when the owner of the site is logged in, they can add/edit all resume content; this should be something like the profile editors on social media platforms, but the specific implementation is up to you. You will receive credit for this insofar as the owner can: 
-   * add new entries to your resume
-   * edit existing entries
-   * you were mindful of styling. 
-
+3.  **Board Storage**:
+  You need to store the state of each Board's Lists, (i.e. anything written inside it) in a persistent database for other team members to see when they are logged in. Once any user signs up and logins again, they should be presented with the projects they had created or are a part of. The Board page should always show the most up-to-date state. 
+4.  **Chat System**: On each Board page, there will be a window option where a group member can chat  with other group members that are currently active and logged into the same Board page. Similar to HW 3, there will be two windows in the chat system: The first window will allow users to type in and submit their chat text, and the second window will display the text. 
 
 
 ## Submitting your assignment
 
-##### Submit Homework 3 Code
+Be sure to perform all development in the `Final-Exam` directory of your <u>Personal Course Repository</u> 
+
+
+
+##### Submit Exam Code
 
 1. Submit your assignment by navigating to the main directory of your <u>Personal Course Repository</u> and Pushing your repo to Gitlab; you can do this by running the following commands:
 
    ```bash
    git add .
-   git commit -m 'submitting Homework 3'
+   git commit -m 'submitting Final Exam'
    git push
    ```
 
-2. You have now submitted Homework 3's code; you can run the same commands to re-submit anytime before the deadline. Please check that your submission was successfully uploaded by navigating to the corresponding directory in Personal Course Repository online.
+2. You have now submitted the Final Exam; you can run the same commands to re-submit anytime before the deadline. Please check that your submission was successfully uploaded by navigating to the corresponding directory in Personal Course Repository online.
 
 
 
 **Deploy your web application to Google Cloud**
 
-Deploy your Dockerized App to Google Cloud by running the commands below from the Homework-3 directory.
+Deploy your Dockerized App to Google Cloud by running the commands below from the Final Exam directory.
 
 ```bash
-gcloud builds submit --tag gcr.io/cse477-spring-2024/homework
-gcloud run deploy --image gcr.io/cse477-spring-2024/homework --platform managed
+gcloud builds submit --tag gcr.io/cse477-spring-2024/exam
+gcloud run deploy --image gcr.io/cse477-spring-2024/exam --platform managed
 ```
 
-* When prompted for service name, press enter.
-* When prompted for the `region` choose `us-central1`
-* When prompted regarding `unauthenticated invocations` choose  `y`
-
-when the application has completed deploying, it will provide provide an output like this:
-
-```bash
-Deploying container to Cloud Run service [homework] in project [cse477-spring-2024] region [us-central1]
-✓ Deploying new service... Done.                                            
-  ✓ Creating Revision...                                                    
-  ✓ Routing traffic...                                                      
-  ✓ Setting IAM Policy...                                                   
-Done.                                                                       
-Service [homework] revision [homework-00001-qol] has been deployed and is serving 100 percent of traffic.
-Service URL: https://homework-z7tywrhkpa-uc.a.run.app
-```
-
- The last line in the above output is the <u>Service URL</u>; You can visit the <u>Service URL</u> above to see a live version of your web application. 
+As we did in the homeworks, please retain the <u>Service URL</u>; You can visit the <u>Service URL</u> above to see a live version of your web application. 
 
 
 
-##### Submit Homework 3 Survey:
+##### Submit Final Exam Service URL (This is required):
 
-[Submit the Service URL for your live web application in this Google Form](https://docs.google.com/forms/d/e/1FAIpQLSd6E-2lyHWYwoki45sRjK1_qot4DpnHMSv-Q3x8JGR90mH1jg/viewform). 
+[Submit the Service URL for your live web application in this Google Form](https://docs.google.com/forms/d/e/1FAIpQLSdovLsgArl0yyz53SE-k4l59sPz035fuNmAfCvT14w15nj1VQ/viewform). 
 
 
 
+## Rubric
+
+The exam is graded on a 100 point scale; all individual requirements recieve an "all or nothing" grade. The following guide will be used when grading your submission: 
+
+**Specific Requirements:**
+
+* <u> 10 points</u> -  The "Signup System" Requirements were met. 
+* <u>10 points</u> -  The Interface "Sign-in Properties" Requirements were met.
+* <u>10 points</u> -  The Interface "Board Properties" Requirements were met.
+* <u>10 points</u> -  The Interface "List Properties" Requirements were met.
+* <u>10 points</u> - The Interface "Card Properties" Requirements were met.
+* <u>10 points</u> -  The Interface "Card Movement" Requirements were met.
+* <u>10 points</u> - The Interface "Live Changes" Requirements were met.
+* <u>10 points</u> -  The "Board Storage" requirements were met.
+* <u>10 points:</u> The "Chat System" Requirements were met
+
+**General Requirements:**
+
+* <u>5 points</u> - Does the code adhere to Frontend best practices covered throughout the semester?
+* <u>5 points</u> - Does the code adhere to Backend best practices covered throughout the semester?
+
+**Please note that you will receive a 0 on the assignment if any of the following conditions are met:**
+
+* Your containerized application does not compile
+* Your application is non-functional
+* Your submission was late
+* Your work was plagiarized, borrowed, or copied
+  * If this condition is met, you will also fail the course.
