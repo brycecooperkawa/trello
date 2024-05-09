@@ -1,0 +1,68 @@
+<!-- FILL ME IN WITH CODE FOR YOUR PAGE LAYOUT -->
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bryce Cooperkawa's personal page</title>
+  <link rel="stylesheet"    href="{{ url_for('static', filename='main/css/main.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='main/images/favicon.ico') }}">
+  {% block extracss %}{% endblock %}
+  <script src="{{ url_for('static', filename='main/js/main.js') }}" defer></script>
+  <script src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+  <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+  {% block extrajs %}{% endblock %}
+</head>
+
+<body>
+    <article>
+    <!-- The header  -->
+    <header class="header">
+      <div class="header_content">
+        <p class="welcome_message">Welcome to Board, List, Cards</p>
+        {% if request.path not in ['/login', '/signup'] %}
+          <p class="logged_in">Logged in as {{user}}</p>
+        {% endif %}
+      </div>
+    </header>
+    
+    <!-- The navigation bar -->
+    <nav class="nav_bar">
+      <div class="nav_content">
+        {% if user == 'Unknown' %}
+        <!-- Show login and sign up option if user isn't known -->
+        <a class="nav_option" href="/login">Login</a>
+        <a class="nav_option" href="/signup">Sign Up</a>
+        {% elif request.path == '/login' %}
+        <!-- Show login and sign up option if user isn't known -->
+        <a class="nav_option" href="/login">Login</a>
+        <a class="nav_option" href="/signup">Sign Up</a>
+        {% elif request.path == '/signup' %}
+        <!-- Show login and sign up option if user isn't known -->
+        <a class="nav_option" href="/login">Login</a>
+        <a class="nav_option" href="/signup">Sign Up</a>
+        {% else %}
+        <!-- Show logout and home option if user is logged in -->
+        <a class="nav_option" href="/home">Home</a>
+        <a class="nav_option" href="/logout">Logout</a>
+        {% endif %}
+      </div>
+    </nav>
+    
+    <!-- The main content  -->
+    <main class="main_content">
+      {% block maincontent %}{% endblock %}
+    </main>
+    
+     <!-- The footer of the file -->
+    <footer class="footer">
+      <p class="footer_text">©2024 Bryce Cooperkawa</p>
+    </footer>
+
+    </article>
+  
+</body>
+
+</html>

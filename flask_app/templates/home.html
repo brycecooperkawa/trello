@@ -1,0 +1,20 @@
+{% extends 'shared/layout.html' %}
+
+{% block maincontent %}
+<button type="button" id="openExistingButton">Open Existing Board</button>
+<button type="button" id="createNewBoardButton">Create New Board</button>
+<br><br>
+<div id="createBoardForm" style="display: none;">
+  <label for="projectNameInput">Project Name:</label>
+  <input type="text" id="projectNameInput" title="projectNameInput"><br><br>
+  <label for="memberEmailInput">Add Email:</label>
+  <input type="email" id="memberEmailInput" title="memberEmailInput">
+  <button type="button" id="addEmailButton">Add Email</button>
+  <div id="emailsContainer"></div><br><br>
+  <button type="button" id="createBoardButton">Create Board</button>
+</div>
+
+
+{% endblock %}
+
+

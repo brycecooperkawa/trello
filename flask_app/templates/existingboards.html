@@ -1,0 +1,11 @@
+{% extends 'shared/layout.html' %}
+
+{% block maincontent %}
+<h1>Existing Boards</h1>
+<h2>Please select which of your existing boards you would like to open:</h2>
+<ul>
+    {% for board in board_names %}
+        <li><a href="#" class="board-link">{{ board }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

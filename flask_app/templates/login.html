@@ -1,0 +1,19 @@
+{% extends 'shared/layout.html' %}
+
+{% block maincontent %}
+<!-- The Login Form with inputs for email password and a submit button  -->
+<form id="loginForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" title="email" required>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" title="password" required>
+    <button type="button" id="submitButton">Login</button>
+</form>
+<br>
+<button type="button" id="signUpButton">Sign Up</button>
+
+<!-- Displays how many times the authentication has failed  -->
+<div class="authFail" id="authFail"></div>
+{% endblock %}
+
+

@@ -1,0 +1,17 @@
+{% extends 'shared/layout.html' %}
+
+{% block maincontent %}
+<!-- The Login Form with inputs for email password and a submit button  -->
+<form id="signupForm">
+    <label for="email">Email:</label>
+    <input type="email" id="emailSignUp" name="emailSignUp" title="emailSignUp" required>
+    <label for="password">Password:</label>
+    <input type="password" id="passwordSignUp" name="passwordSignUp" title="passwordSignUp" required>
+    <label for="password2">Password:</label>
+    <input type="password" id="passwordSignUp2" name="passwordSignUp2" title="passwordSignUp2" required>
+    <button type="button" id="createAccountButton">Create Account</button>
+</form>
+<!-- Displays if the passwords don't match  -->
+<div class="passwordMatch" id="passwordMatch"></div>
+<div class="userExists" id="userExists"></div>
+{% endblock %}

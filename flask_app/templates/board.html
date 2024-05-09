@@ -1,0 +1,53 @@
+{% extends 'shared/layout.html' %}
+
+{% block maincontent %}
+    <!-- Holds the user for chat reasons -->
+    <div id="data" user="{{ user }}" board_name="{{ board_name }}"></div>
+
+    <!-- Display the Board Name -->
+    <h1 class="board_name">{{ board_name }}</h1>
+    <br>
+
+    <!-- For each list -->
+    {% for list_id, list_info in board_data.items() %}
+    <div class="list droppable" id="list_{{ list_id }}">
+        <!-- Display the lists name -->
+        <h2 class="list_title">{{ list_info['name'] }}</h2>
+    
+        <!-- For each card in the list -->
+        {% for card_id, card_info in list_info['cards'].items() %}
+            {% if card_info['description'] %}
+                <div class="card draggable" card_id="{{ card_info['card_id'] }}">
+                    <!-- Display the cards description -->
+                    <p>{{ card_info['description'] }}</p>
+                    <button class="editButton">Edit</button>
+                    <button class="deleteButton">Delete</button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!-- Button to add a new card -->
+    <form id="addCardForm_{{ list_id }}" class="add_card_form">
+        <input type="hidden" name="list_id" value="{{ list_id }}" title="list_id">
+        <input type="text" name="description" title="description" placeholder="Enter card description" required>
+        <button type="button" class="addCardButton" list_id="{{ list_id }}">Add Card</button>
+    </form>
+    <hr class="board_hr">
+    {% endfor %}
+
+    <p>Chat</p>
+
+    <div id='chat'>    
+    </div>
+
+    <!-- Input for message, a send chat and a leave chat button  -->
+    <textarea id="message" title="message" placeholder="Enter your message here"></textarea>
+    <button id="send">Send Message</button>
+{% endblock %}
+
+{% block extrajs %}
+<!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script> -->
+<script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+<script src="{{ url_for('static', filename='main/js/card.js') }}" defer></script>
+<script src="{{ url_for('static', filename='main/js/chat.js') }}" defer></script>
+{% endblock %}

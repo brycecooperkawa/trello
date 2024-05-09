@@ -1,0 +1,142 @@
+/* Global styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #000000; 
+}
+
+/* Header styles */
+.header {
+    background-color: #18453B;
+    color: #fff;
+    padding: 2%;
+}
+  
+.header_content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+  
+.welcome_message {
+    margin-right: 2%;
+}
+  
+.logged_in {
+    margin-left: 2%;
+}
+
+/* Navigation Bar styles */
+.nav_bar {
+    background-color: #000000;
+    padding: 1%;
+}
+  
+.nav_bar .nav_content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav_option {
+    color: #18453B;
+    text-decoration: none;
+    padding: 0.5% 1%;
+}
+
+/* Main content styles */
+.main_content {
+    padding: 2%;
+}
+
+/* Footer styles */
+.footer {
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #000000;
+    color: #18453B;
+    padding: 2%;
+    text-align: center;
+}
+
+.footer_text {
+    margin: 0;
+}
+
+/* Component Styles */
+
+/* Authorization fail message */
+.authFail, .userExists, .passwordMatch {
+    color: #ff0000;
+}
+
+/* Hidden element */
+.hidden {
+    display: none;
+}
+
+/* Chat styling */
+#chat {
+    width: 100%;
+    height: 45vh;
+    padding: 1% 2%;
+    box-sizing: border-box;
+    border: 0.2em solid #ccc;
+    border-radius: 0.4em;
+    background-color: #f8f8f8;
+    font-size: 1em;
+    resize: none;
+    overflow-y: auto;
+}
+
+/* Style for the board */
+.board_name {
+    font-size: 2.4vw;
+    margin-bottom: 2.5vh;
+}
+
+/* Style for each list */
+.list {
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+    padding: 2%;
+    margin-bottom: 2.5vh;
+    background-color: #f9f9f9;
+}
+
+/* Style for list title */
+.list_title {
+    font-size: 2vw;
+    margin-bottom: 1.5vh;
+}
+
+/* Style for each card */
+.card {
+    background-color: #fff;
+    border: 0.1em solid #ccc;
+    border-radius: 0.5em;
+    padding: 2%;
+    margin-bottom: 1.5vh;
+    position: relative;
+}
+
+/* Style for card buttons */
+.card button {
+    margin-right: 1vw;
+    cursor: pointer;
+}
+
+/* Style for add card form */
+.add_card_form {
+    margin-top: 1vh;
+}
+
+/* Style for hr */
+.board_hr {
+    margin-top: 2.5vh;
+    border: 0;
+    border-top: 0.1em solid #ccc;
+}
+
